@@ -1,0 +1,258 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Studio Ghibli Movie Library",
+        "description": "This Studio Ghibli API catalogs main informations on studio Ghibli movies, such as title, descriptions and release year",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Studio Ghibli Movie Library",
+            "description": "This Studio Ghibli API catalogs main informations on studio Ghibli movies, such as title, descriptions and release year"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/film": {
+            "get": {
+                "tags": [
+                    "Get all Ghibli Movies"
+                ],
+                "summary": "Get all Ghibli Movies and the informations related to the movies",
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to see all of studio Ghibli films"
+                    }
+                }
+            }
+        },
+        "/film/search/{title}": {
+            "get": {
+                "tags": [
+                    "Get studio Ghibli movie information based on the movie title"
+                ],
+                "summary": "Get all movie informations of the related title",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "Put the title of the movie you want to search"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to see informations about a specific movie based on the title of the movie"
+                    }
+                }
+            }
+        },
+        "/film/filter": {
+            "get": {
+                "tags": [
+                    "Get studio Ghibli movie information based on paratemers specified"
+                ],
+                "summary": "Get all movie informations of a movie based on related query",
+                "parameters": [
+                    {
+                        "name": "param",
+                        "in": "query",
+                        "description": "Put your parameter for the movie, ex: release_date, title, or producer"
+                    },
+                    {
+                        "name": "value",
+                        "in": "query",
+                        "description": "Put the filter value here, ex: 1990, Princess Mononoke, or Toshio Suzuki"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to see informations about a specific movie based on the parameters of the movie"
+                    }
+                }
+            }
+        },
+        "/film/years": {
+            "get": {
+                "tags": [
+                    "Get studio Ghibli movie information in beetween 2 periods of years"
+                ],
+                "summary": "Get all movie informations of a movie in beetween 2 periods of years",
+                "parameters": [
+                    {
+                        "name": "year1",
+                        "in": "query",
+                        "description": "Put the starting year"
+                    },
+                    {
+                        "name": "year2",
+                        "in": "query",
+                        "description": "Put the ending year period here"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to see informations about a specific movie in beetween 2 periods of years"
+                    }
+                }
+            }
+        },
+        "/film/match/{letters}": {
+            "get": {
+                "tags": [
+                    "Search all studio Ghibli movies by matching characters"
+                ],
+                "summary": "Get all movie information with the matching character title",
+                "parameters": [
+                    {
+                        "name": "letters",
+                        "in": "path",
+                        "description": "Put the letters of the movie you want to search"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to see all studio Ghibli movies that matches with your letters"
+                    }
+                }
+            }
+        },
+        "/film/update/{title}": {
+            "put": {
+                "tags": [
+                    "Update information on a studio Ghibli movie based on the title"
+                ],
+                "summary": "Update movie informations of the related title",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "Put the title of the movie you want to update"
+                    },
+                    {
+                        "name": "datas",
+                        "in": "body",
+                        "description": "Put the column you want to update. Ex: release_year, producer, director, title, and then the value of that column. Ex: 2023, aunty mena, joshua, etc",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "column",
+                                "value"
+                            ],
+                            "properties": {
+                                "column": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to update a specific movie information based on the title"
+                    }
+                }
+            }
+        },
+        "/film/add": {
+            "post": {
+                "tags": [
+                    "Adding a new movie to the studio Ghibli movie database"
+                ],
+                "summary": "Add movies to the studio Ghibli database",
+                "parameters": [
+                    {
+                        "name": "datas",
+                        "in": "body",
+                        "description": "Put the information of the movie you want to add. Ex: release_year, producer, director, title",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "id",
+                                "title",
+                                "descriptions",
+                                "director",
+                                "producer",
+                                "release_date"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "descriptions": {
+                                    "type": "string"
+                                },
+                                "director": {
+                                    "type": "string"
+                                },
+                                "producer": {
+                                    "type": "string"
+                                },
+                                "release_date": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to add a new movie to the studio Ghibli studio"
+                    }
+                }
+            }
+        },
+        "/film/delete/{title}": {
+            "delete": {
+                "tags": [
+                    "Delete all information on a studio Ghibli movie based on the title"
+                ],
+                "summary": "Delete movie informations of the related title",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "Put the title of the movie you want to delete"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to delete movie information based on the title"
+                    }
+                }
+            }
+        },
+        "/film/deleteAll": {
+            "delete": {
+                "tags": [
+                    "Delete all Ghibli Movies"
+                ],
+                "summary": "Delete all Ghibli Movies and the informations related to the movies",
+                "responses": {
+                    "200": {
+                        "description": "This service allows you to delete all of studio Ghibli films"
+                    }
+                }
+            }
+        }
+    }
+}
