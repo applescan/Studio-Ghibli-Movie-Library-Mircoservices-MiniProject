@@ -4,14 +4,15 @@ var getFilmData = require('../middleware/api.js') //import original API
 
 //initializing the data to load to the database on startup
 let initMovies = async () => {
-    let resp = await getFilmData.fetchData('films')  //get all movies from 3rd party api
 
-    let filmIds = []
-    let titles = []
-    let descriptions = []
-    let directors = []
-    let producers = []
-    let releaseDates = []
+    var resp = await getFilmData.fetchData('films')  //get all movies from 3rd party api
+
+    var filmIds = []
+    var titles = []
+    var descriptions = []
+    var directors = []
+    var producers = []
+    var releaseDates = []
 
     //you do for loop to get the film datas then push it to an array
     for (let i = 0; i < resp.length; i++) {
@@ -25,30 +26,35 @@ let initMovies = async () => {
 
     }
 
-    //insert each array informations to the SQL tables using the SQL command
-    return new Promise((resolve, reject) => {
-        let sqlQuery =
-            `TRUNCATE TABLE films;`;    //delete all the table data everytime the function is called, so there will be no duplicate
-
+    new Promise((resolve, reject) => {   //Make a promise that before loading the datas, function initMovies has to truncate the table first
+        let sqlQuery = `TRUNCATE TABLE films;`;
         sql.query(sqlQuery, (err, result, field) => {
             if (err) return reject(err);
-            resolve(Object.values(result));
-        });
+            resolve(Object.values(("truncated the table")));
+        })
 
-        for (var i = 0; i < filmIds.length; i++) { //looping through each names and adding it to the table
-            let sqlQuery =
-                `INSERT INTO films (id, title, descriptions, director, producer, release_date) VALUES 
-                ("${filmIds[i]}","${titles[i]}", "${descriptions[i]}","${directors[i]}","${producers[i]}", "${releaseDates[i]}")`;
+    }).then(  //if truncate is executed then it will populate the database
+        result => {
 
-            sql.query(sqlQuery, (err, result, field) => {
+            new Promise((resolve, reject) => {
+                for (var i = 0; i < filmIds.length; i++) { //looping through each names and adding it to the table
+                    let sqlQuery =
+                        `INSERT INTO films (id, title, descriptions, director, producer, release_date) VALUES 
+                        ("${filmIds[i]}","${titles[i]}", "${descriptions[i]}","${directors[i]}","${producers[i]}", "${releaseDates[i]}")`;
+
+                    sql.query(sqlQuery, (err, result, field) => {
+                        if (err) return reject(err);
+                        resolve(Object.values(result));
+                    });
+
+                }
+            }, (err, result, field) => {
                 if (err) return reject(err);
-                resolve(Object.values(result));
-            });
-
-        }
-    });
-
+                resolve("inserted into table");
+            })
+        })
 }
+
 
 
 // all get requests

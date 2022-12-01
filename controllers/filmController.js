@@ -1,9 +1,8 @@
 let DBServices = require('../services/dbServices.js')
 
 const initMovies = async (req, res) => {
-    
+
     let data = await DBServices.initMovies(req, res)
-    console.log(data)
     if (res) {            //when someone make req to api it will send the data back to the user
         res.send(data)
     }
